@@ -14,13 +14,18 @@ import time
 
 import pandas
 import pytest
-from intake import Catalog
+from intake import register_driver, open_catalog
 from intake import open_nested_yaml_cat
 from intake.catalog import local
 from intake.catalog.local import UserParameter, LocalCatalogEntry
 from intake.catalog.tests.util import assert_items_equal
 from intake.utils import make_path_posix
 
+import sys
+here = os.path.abspath(os.path.dirname(__file__))
+sys.path.append(here)
+import example_plugin_dir.example2_source
+register_driver('example2', example_plugin_dir.example2_source.Ex2Plugin)
 
 
 @pytest.fixture
@@ -150,9 +155,7 @@ def test_user_parameter_default_value(dtype, expected):
 
 def test_user_parameter_str_method():
     p = local.UserParameter('a', 'a desc', 'str')
-    expected = ("UserParameter(name='a', description='a desc', type='str', "
-                "default='', min=None, max=None, allowed=None)")
-    assert str(p) == expected
+    assert 'a' in str(p)
 
 
 @pytest.mark.parametrize("dtype,given,expected", [
@@ -320,7 +323,7 @@ sources:
 
 def test_catalog_file_removal(temp_catalog_file):
     cat_dir = os.path.dirname(temp_catalog_file)
-    cat = Catalog(cat_dir + '/*')
+    cat = open_catalog(cat_dir + '/*')
     assert set(cat) == {'a', 'b'}
 
     os.remove(temp_catalog_file)

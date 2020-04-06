@@ -48,5 +48,5 @@ def test_nested_cat_walk():
 def test_gui():
     pytest.importorskip('panel')
     cat = intake.open_nested_yaml_cat(nested_yaml_cat_path)
-    assert repr(intake.gui).startswith('Row')
+    assert repr(intake.gui).startswith('Column')
     intake.gui.add(cat)

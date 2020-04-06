@@ -1,6 +1,6 @@
 from typing import List, Dict
 
-from intake import Catalog
+from intake.catalog import Catalog
 from intake.catalog import exceptions
 from intake.catalog.entry import CatalogEntry
 from intake.catalog.exceptions import ValidationError
